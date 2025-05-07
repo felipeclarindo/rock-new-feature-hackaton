@@ -9,20 +9,19 @@ import time
 
 print("Libraries imported")
 
-# Configuração do Selenium WebDriver
-# O webdriver-manager irá automaticamente baixar e configurar o ChromeDriver
+# Selenium web driver configurated
 driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
 
 url = "https://www.reclameaqui.com.br/empresa/hp"
 driver.get(url)
 
-# Esperar um pouco para garantir que a página carregue (ajuste o tempo conforme necessário)
+# Wait the page load
 time.sleep(3)
 
-# Obtendo o conteúdo da página após o carregamento completo
+# Get the data
 page_source = driver.page_source
 
-# Usando BeautifulSoup para fazer o parse do HTML
+# Using beautiful soup to parse html
 soup = BeautifulSoup(page_source, 'html.parser')
 
 print("Content Parsed.")
@@ -46,7 +45,7 @@ if responses:
 if datas:
     print("Dates obtained")
 
-# Iterando pelos elementos extraídos e adicionando os dados à lista
+# Iter with elements extracted added with the data list
 for title, description, response_text, data_text in zip(titles, descriptions, responses, datas):
     data.append({
         'title': title.get_text().strip(),
@@ -55,12 +54,12 @@ for title, description, response_text, data_text in zip(titles, descriptions, re
         'data': data_text.get_text().strip()
     })
 
-# Criando um DataFrame com os dados extraídos
+# Creating the dataframe with data extracted
 df = pd.DataFrame(data)
 
-# Salvando os dados no formato CSV
+# Saving the data with csv format
 df.to_csv('reports_hp_selenium.csv', index=False, encoding='utf-8')
 print("Dados salvos com sucesso!")
 
-# Fechando o navegador
+# Close driver
 driver.quit()
